@@ -1,0 +1,4 @@
+{
+  "name": "slang",
+  "install": "bash scripts/install.sh"
+}

@@ -29,7 +29,8 @@ for _ in $(seq 50); do
   sleep 0.2
 done
 
-cloudflared tunnel --no-autoupdate --url "http://127.0.0.1:$PORT" >"$TUNNEL_LOG" 2>&1 &
+# http2 rather than the default QUIC: cloudflared issue 1652 drops WebSocket upgrades.
+cloudflared tunnel --no-autoupdate --protocol http2 --url "http://127.0.0.1:$PORT" >"$TUNNEL_LOG" 2>&1 &
 TUNNEL_PID=$!
 
 PUBLIC_URL=""

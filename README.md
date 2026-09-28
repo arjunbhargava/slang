@@ -28,13 +28,8 @@ architecture. Their setup and task briefs will be documented separately.
 
 ## Runtime design
 
-```text
-microphone -> streaming STT -> conversation agent -> multilingual TTS -> speaker
-                                      |
-                          Bedrock / OpenAI / Anthropic
-
-The interface displays the transcript and conversation.
-```
+Diagrams of the context, components, turn flow, and turn states are in
+[docs/architecture.md](docs/architecture.md).
 
 Keep speech recognition, tutoring, and speech synthesis separate. This lets us
 select speech models for bilingual quality rather than requiring everything to

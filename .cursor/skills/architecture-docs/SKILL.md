@@ -54,27 +54,9 @@ the four kinds in one section:
 | Reference | Look something up | Complete, consistent, terse; generated where possible |
 | Explanation | Understand why | Context, trade-offs, alternatives, history |
 
-Didactic principles:
-
-- **Open with the claim.** First paragraph: what this is, who it's for, and
-  what the reader can do after reading. Include status (draft, stable,
-  deprecated) when it isn't obvious.
-- **Concrete before abstract.** Show one real example or data flow, then
-  generalize. A single end-to-end trace (request → components → response)
-  teaches more than a component list.
-- **Define before use.** Introduce each term once, precisely, then use it
-  consistently. Never use two names for one thing.
-- **Progressive disclosure.** Overview → mechanism → edge cases. A reader who
-  stops after the first section should still have a correct model, just a
-  coarse one.
-- **Explain why, not what.** Code shows what. Docs carry intent, constraints,
-  rejected alternatives, and the conditions under which a decision should be
-  revisited.
-- **Quantify.** Prefer "p95 < 800 ms end of speech → first audio" to "fast".
-  State units, bounds, and where numbers came from (measured vs. documented
-  vs. assumed).
-- **Link, don't duplicate.** Each fact lives in one place. Reference external
-  sources inline where the claim is made.
+Write every document by the writing rules in the `clarity` skill. For
+architecture docs in particular, a single end-to-end trace (request, then each
+component, then response) teaches more than a list of components.
 
 ## Diagrams
 

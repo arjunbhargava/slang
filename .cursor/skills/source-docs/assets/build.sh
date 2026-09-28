@@ -8,6 +8,9 @@ gen=docs/_generated
 rm -rf "$gen" docs/_build
 mkdir -p "$gen/html/api"
 
+# Diagrams: committed SVGs must match their D2 sources.
+docs/diagrams/render.sh --check
+
 # Python: sphinx-autoapi reads it during sphinx-build; enforce docstrings first.
 ruff check --quiet src
 

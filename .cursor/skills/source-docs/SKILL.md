@@ -20,6 +20,9 @@ the code and docs disagree, the build fails.
 1. **Never hand-write API reference.** Hand-written pages are only
    explanation, how-to, or tutorial content (see `architecture-docs`), and they
    link into the generated reference.
+   They link only to other docs pages or absolute URLs, and name other repo
+   files as code paths (`docs/diagrams/`), because the strict build rejects
+   links it can't resolve.
 2. **One command builds everything.** `docs/build.sh` runs every language's
    generator, then the hub build. Agents, CI, and humans all run the same
    command.
@@ -36,9 +39,9 @@ the code and docs disagree, the build fails.
 
 Use Sphinx as the hub, with MyST for Markdown and the Furo theme, whatever the
 languages. It is the only mature hub that can read several languages natively
-and also take in Markdown and HTML from other generators. Mermaid diagrams in
-`docs/*.md` render in the site through `sphinxcontrib-mermaid`, using the same
-source that GitHub renders.
+and also take in Markdown and HTML from other generators. Architecture
+diagrams are committed D2 SVGs (see `architecture-docs`), so they appear in the
+site as ordinary images. The build fails if any SVG is stale.
 
 Bring each language in through the first option that works, in this order:
 
@@ -59,7 +62,7 @@ Bring each language in through the first option that works, in this order:
 | C / C++ | Native | Doxygen XML → Breathe | `WARN_IF_UNDOCUMENTED=YES`, `WARN_AS_ERROR=YES` |
 | Other | Markdown if the generator can emit it, else embedded HTML | The language's canonical generator | The generator's warnings-as-errors mode |
 
-The Python, TypeScript, and Rust rows, the Mermaid rendering, and every gate
+The Python, TypeScript, and Rust rows, the diagram images, and every gate
 in those rows were verified end to end. The Go and C/C++ rows follow each
 tool's documented flags; confirm them the first time they're used.
 
@@ -71,7 +74,6 @@ Copy the templates in `assets/`:
 |---|---|---|
 | `conf.py` | `docs/conf.py` | Set `project`, keep only the extensions for the repo's languages, and point `autoapi_dirs` at the Python source |
 | `build.sh` | `docs/build.sh` | Keep one block per language in the repo, and fix paths such as `web/` and `--manifest-path` |
-| `mermaid.css` | `docs/_static/mermaid.css` | — |
 
 Then:
 
@@ -82,8 +84,7 @@ Then:
 - For each embedded-HTML language, add a stub page such as `docs/api/rust.md`
   that links to `rust/<crate>/index.html`.
 - Declare the Python docs dependencies with the repo's other dev dependencies:
-  `sphinx`, `sphinx-autoapi`, `myst-parser`, `sphinxcontrib-mermaid`, `furo`,
-  and `ruff`, plus `breathe` if the repo has C or C++. Put the TypeDoc packages
+  `sphinx`, `sphinx-autoapi`, `myst-parser`, `furo`, and `ruff`, plus `breathe` if the repo has C or C++. Put the TypeDoc packages
   in `devDependencies`.
 - Configure `ruff` in `pyproject.toml`:
 

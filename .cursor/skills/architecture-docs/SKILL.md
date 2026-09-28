@@ -87,25 +87,21 @@ The set is fixed, and each diagram answers one question:
 | Diagram | Question | Mermaid type |
 |---|---|---|
 | Context | What talks to the system, across which trust boundary? | `flowchart` |
-| Components | What are the modules, and which way do dependencies point? | `flowchart` |
+| Components | What are the parts, and what flows between them? | `flowchart` |
 | Main flow | What happens, in order, for the core use case? | `sequenceDiagram` |
 | State | What states can the stateful part be in, and what moves it? | `stateDiagram-v2` |
 
 Add a diagram only for a question the set doesn't answer, such as a second
 core flow. Drop one that stops carrying information.
 
-Conventions:
+Every diagram follows the design system in
+[references/diagram-style.md](references/diagram-style.md). It covers the
+palette, the node and edge vocabulary, the Mermaid headers to copy, the page
+layout with its legend and glossary, and how to verify renders. Read it before
+creating or editing a diagram. In addition:
 
-- Use Mermaid in fenced blocks. It renders on GitHub, diffs as text, and
-  reviewers can check it line by line.
 - Node names are the identifiers used in code (module, class, or env var), so
   a diagram can be grepped against the source.
-- Keep each diagram to about 12 nodes. More than that means it mixes C4
-  levels; split it by level.
-- Label edges with what flows (`committed transcript`, not `calls`), and mark
-  trust boundaries with `subgraph`.
-- Under each diagram, add a one-sentence caption stating the takeaway, plus
-  any invariant the diagram can't show.
 - Mark anything not yet implemented as `planned`, for example with a dashed
   edge or a `(planned)` suffix. If none of it exists yet, a single status line
   at the top of the doc is enough. A diagram must never show a design as if

@@ -73,17 +73,57 @@ Didactic principles:
 - **Quantify.** Prefer "p95 < 800 ms end of speech → first audio" to "fast".
   State units, bounds, and where numbers came from (measured vs. documented
   vs. assumed).
-- **Diagrams as text.** ASCII or Mermaid in the markdown, so they diff and
-  review. One diagram per level of abstraction (C4: context → container →
-  component); never mix levels in one diagram.
 - **Link, don't duplicate.** Each fact lives in one place. Reference external
   sources inline where the claim is made.
+
+## Diagrams
+
+`docs/architecture.md` holds a maintained set of diagrams. They are the fast
+path to the mental model: a reader should understand the system from the
+diagrams and their captions, and turn to the prose for the reasons behind it.
+
+The set is fixed, and each diagram answers one question:
+
+| Diagram | Question | Mermaid type |
+|---|---|---|
+| Context | What talks to the system, across which trust boundary? | `flowchart` |
+| Components | What are the modules, and which way do dependencies point? | `flowchart` |
+| Main flow | What happens, in order, for the core use case? | `sequenceDiagram` |
+| State | What states can the stateful part be in, and what moves it? | `stateDiagram-v2` |
+
+Add a diagram only for a question the set doesn't answer, such as a second
+core flow. Drop one that stops carrying information.
+
+Conventions:
+
+- Use Mermaid in fenced blocks. It renders on GitHub, diffs as text, and
+  reviewers can check it line by line.
+- Node names are the identifiers used in code (module, class, or env var), so
+  a diagram can be grepped against the source.
+- Keep each diagram to about 12 nodes. More than that means it mixes C4
+  levels; split it by level.
+- Label edges with what flows (`committed transcript`, not `calls`), and mark
+  trust boundaries with `subgraph`.
+- Under each diagram, add a one-sentence caption stating the takeaway, plus
+  any invariant the diagram can't show.
+- Mark anything not yet implemented as `planned`, for example with a dashed
+  edge or a `(planned)` suffix. If none of it exists yet, a single status line
+  at the top of the doc is enough. A diagram must never show a design as if
+  it already exists.
+- Until the code exists, name nodes after the design doc's terms. Rename them
+  to code identifiers in the PR that introduces the code.
+
+Maintenance: every PR checks the diagrams against its diff. If it changes
+components, dependencies, data flow, state transitions, or external services,
+update the affected diagrams in the same PR. Then report in the PR body which
+diagrams were updated, or state `no structural change`. A stale diagram is
+worse than none, because it teaches the wrong model.
 
 ## Placement
 
 - `README.md`: what it is, quickstart, pointer to the rest. Short.
-- `docs/architecture.md`: system context, main data flow, module map,
-  invariants, failure handling.
+- `docs/architecture.md`: the diagrams, then the prose: system context, main
+  data flow, module map, invariants, failure handling.
 - `docs/adr/`: decisions.
 - Module-level doc comment: that module's responsibility, invariants, and
   what it deliberately does not do.
@@ -97,5 +137,7 @@ Before finishing, check the result against these:
 2. Is every term defined once and used consistently?
 3. Does every component have one stated responsibility and owner of state?
 4. Are failure modes and invariants written down where they're enforced?
-5. Is there anything (a section, layer, or abstraction) that no reader needs?
+5. Does every diagram match the code as of this diff, with any planned parts
+   marked?
+6. Is there anything (a section, layer, or abstraction) that no reader needs?
    Delete it.

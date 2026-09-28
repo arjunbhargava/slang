@@ -1,0 +1,23 @@
+...@_style
+direction: down
+
+start: "" {shape: circle; width: 18; height: 18; style: {fill: "#5e5d59"; stroke: "#5e5d59"}}
+Idle: Idle {class: person; shape: rectangle; width: 170; height: 56; style.border-radius: 28}
+Recording: "Recording\nmicrophone on" {class: person; shape: rectangle; width: 170; height: 56; style.border-radius: 28}
+Transcribing: Transcribing {class: module; width: 170; height: 56; style.border-radius: 28}
+Reviewing: Reviewing {class: person; shape: rectangle; width: 170; height: 56; style.border-radius: 28}
+Responding: Responding {class: module; width: 170; height: 56; style.border-radius: 28}
+Speaking: "Speaking\nstoppable" {class: module; width: 170; height: 56; style.border-radius: 28}
+end: "" {shape: circle; width: 18; height: 18; style: {fill: "#faf9f5"; stroke: "#5e5d59"; stroke-width: 5}}
+
+start -> Idle: config valid {class: flow}
+Idle -> Recording: Enter {class: primary}
+Recording -> Transcribing: Enter {class: primary}
+Transcribing -> Reviewing: transcript ready {class: primary}
+Reviewing -> Responding: accept or edit {class: primary}
+Responding -> Speaking: reply ready {class: primary}
+Speaking -> Idle: done or stopped {class: primary}
+Transcribing -> Idle: empty or STT error {class: aside}
+Reviewing -> Idle: discard {class: aside}
+Responding -> Idle: provider error {class: aside}
+Idle -> end: exit {class: flow}

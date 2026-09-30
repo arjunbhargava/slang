@@ -1,0 +1,11 @@
+/* Show diagrams at natural size, shrinking only to fit the column. */
+.mermaid-container > pre > svg,
+pre.mermaid > svg {
+  width: auto !important;
+  max-width: 100% !important;
+  height: auto !important;
+}
+.mermaid-container > pre,
+pre.mermaid {
+  text-align: center;
+}

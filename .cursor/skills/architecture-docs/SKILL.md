@@ -84,20 +84,20 @@ diagrams and their captions, and turn to the prose for the reasons behind it.
 
 The set is fixed, and each diagram answers one question:
 
-| Diagram | Question | Mermaid type |
+| Diagram | Question | D2 layout |
 |---|---|---|
-| Context | What talks to the system, across which trust boundary? | `flowchart` |
-| Components | What are the parts, and what flows between them? | `flowchart` |
-| Main flow | What happens, in order, for the core use case? | `sequenceDiagram` |
-| State | What states can the stateful part be in, and what moves it? | `stateDiagram-v2` |
+| Context | What talks to the system, across which trust boundary? | Grid of columns |
+| Data flow | What are the parts, and what moves between them? | Grid of stage columns |
+| Main flow | What happens, in order, for the core use case? | `sequence_diagram` |
+| State | What states can the stateful part be in, and what moves it? | TALA, free layout |
 
 Add a diagram only for a question the set doesn't answer, such as a second
 core flow. Drop one that stops carrying information.
 
 Every diagram follows the design system in
 [references/diagram-style.md](references/diagram-style.md). It covers the
-palette, the node and edge vocabulary, the Mermaid headers to copy, the page
-layout with its legend and glossary, and how to verify renders. Read it before
+palette, the node and edge vocabulary, the shared D2 style, layout rules, the
+page layout with its legend and glossary, and how to render and check diagrams. Read it before
 creating or editing a diagram. In addition:
 
 - Node names are the identifiers used in code (module, class, or env var), so

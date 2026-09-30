@@ -26,15 +26,15 @@ then run `docs/diagrams/render.sh`, and commit the source and the SVG together.
 |---|---|---|
 | Person | Green figure | The learner |
 | Core | Orange box | Code that owns conversation state or tutoring policy. Start reading here. |
-| Module | White box | Code we own that moves data: audio, adapters, terminal input and output |
+| Module | Plain box | Code we own that moves data: audio, adapters, terminal input and output |
 | External service | Blue box | A paid provider API reached over the network |
-| Stage | Oat panel, name at the bottom | A step of a turn: Hear, Think, Speak |
+| Stage | Shaded panel, name at the bottom | A step of a turn: Hear, Think, Speak |
 | Trust boundary | Dashed outline | The learner's machine, which holds every API key |
 | Primary path | Thick orange arrow | The route a spoken turn takes; follow it first |
 | Data flow | Grey arrow | Something moves; the label says what |
 | Reply, failure, or optional | Dashed grey arrow | Responses, error returns, and paths not always taken |
 
-In the turn states diagram, a green state is waiting for the learner and a white
+In the turn states diagram, a green state is waiting for the learner and a plain
 one is the harness working. In the one-turn diagram, each lifeline takes the
 colour of its participant's kind.
 

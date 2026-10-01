@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>slang</title>
+  <style>
+    :root { color-scheme: light dark; font-family: system-ui, -apple-system, sans-serif; }
+    body { margin: 0; padding: 1.5rem; max-width: 36rem; margin-inline: auto; }
+    h1 { font-size: 1.4rem; }
+    code { font-size: 0.9em; }
+  </style>
+</head>
+<body>
+  <h1>slang</h1>
+  <p>The server and tunnel are running. The push-to-talk client is not built yet.</p>
+  <p id="status">Checking backend&hellip;</p>
+  <script>
+    fetch("/healthz").then(r => r.json()).then(body => {
+      document.getElementById("status").textContent =
+        body.ok ? "Backend reachable over HTTPS." : "Backend returned an unexpected response.";
+    }).catch(() => {
+      document.getElementById("status").textContent = "Backend unreachable.";
+    });
+  </script>
+</body>
+</html>

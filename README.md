@@ -4,7 +4,9 @@ A reusable voice-first language-learning tool. Choose a language to practise,
 speak naturally, and switch to English whenever you need an explanation or help
 finding a word. The tutor follows the switch and helps you return to practice.
 
-Status: design draft. No application or setup commands exist yet.
+Status: scaffold. Shared interfaces, config validation, fakes, and a
+token-protected web skeleton exist; providers and the push-to-talk client do
+not. Commands are in `AGENTS.md`.
 
 ## Product requirements
 
@@ -20,8 +22,9 @@ Status: design draft. No application or setup commands exist yet.
   requested, then return to practice. Avoid correcting every sentence by default.
 - Show the transcript and tutor response. Let users correct recognition errors;
   do not mistake transcription uncertainty for a learner error.
-- Test the first version with manual push-to-talk and stoppable playback.
-  Product UI, hands-free turn detection, and spoken interruptions are deferred.
+- Test the first version with manual push-to-talk and stoppable playback in a
+  minimal mobile web page. Product UI, hands-free turn detection, and spoken
+  interruptions are deferred.
 
 Cursor cloud agents are an implementation workflow, not part of the runtime
 architecture. Their setup and task briefs will be documented separately.
@@ -46,24 +49,38 @@ responses, logs, or committed files.
 Keep sessions isolated, bound recording duration and conversation context, and
 avoid retaining raw audio or logging transcripts by default.
 
-### First version: terminal test harness
+### First version: temporary web test harness
 
-Use a minimal terminal harness to validate the bilingual conversation loop, not
-build a product UI:
+Development and testing happen from a phone, so the harness is a single mobile
+web page served by a Python (FastAPI) backend, not a terminal program. It
+validates the bilingual conversation loop; it is not a product UI:
 
-- Select the target language, learner level, model provider, and model at startup.
-- Press Enter to start recording, then Enter again to stop. Manual stop defines
-  the turn boundary; do not rely on automatic silence detection.
-- Finalize transcription, print it, and allow accepting, editing, or discarding it
+- Select the target language, learner level, model provider, and model when
+  starting a session.
+- Tap to start recording, tap again to stop. Manual stop defines the turn
+  boundary; do not rely on automatic silence detection.
+- The page captures 16 kHz mono 16-bit PCM with an `AudioWorklet` and streams it
+  over a WebSocket. iOS Safari's `MediaRecorder` emits AAC, which streaming STT
+  APIs do not accept as raw PCM.
+- Finalize transcription, show it, and allow accepting, editing, or discarding it
   before sending it to the conversation agent. Skip empty transcripts.
-- Print the tutor response and play its synthesized speech. Allow playback to be
-  stopped; keep the microphone inactive during playback to avoid feedback.
-- Repeat with conversation context intact; provide a clean exit that closes audio
-  devices and provider connections.
+- Show the tutor response and play its synthesized speech (MP3 plays on iOS).
+  Allow playback to be stopped; keep the microphone inactive during playback.
+- Repeat with conversation context intact; ending the session closes provider
+  connections.
 
-Text input and prerecorded-audio input should exercise the same conversation
-path without requiring a microphone. These are testing entry points, not separate
-products. Browser/mobile UI, visual design, VAD, and full-duplex audio are deferred.
+Text input and prerecorded-audio input exercise the same conversation path
+without a microphone. These are testing entry points, not separate products.
+Visual design, VAD, and full-duplex audio are deferred.
+
+Hosting is temporary: a cloud agent runs `scripts/serve.sh`, which starts the
+backend and a Cloudflare quick tunnel and prints a random
+`https://*.trycloudflare.com` URL. HTTPS is required for microphone access. The
+URL lives only while the agent's VM is up. Because the URL is public and the
+backend spends API credits, every route except `/healthz` requires a per-run
+access token, passed once in the URL and then kept in an HttpOnly cookie.
+Quick tunnels are for testing; if a stable URL becomes necessary, use a named
+tunnel or a small deployment instead.
 
 ### Model providers and conversation ownership
 
@@ -194,8 +211,8 @@ scoring is out of scope without an audio-aware assessment path.
 
 ## Before implementation
 
-The first interface is settled: a terminal push-to-talk test harness. Confirm
-STT/TTS providers through the small bilingual evaluation above, then define
-implementation milestones and Cursor cloud-agent setup separately.
-Do not add product UI, deployment infrastructure, permanent cloud-agent
-credentials, or a provider framework for this test harness.
+The first interface is settled: a temporary web push-to-talk harness. Confirm
+STT/TTS providers through the small bilingual evaluation above.
+Do not add product UI, permanent deployment infrastructure, or a provider
+framework for this test harness. Cloud agents read provider keys from Cursor
+runtime secrets; use dedicated, spend-limited keys for this.

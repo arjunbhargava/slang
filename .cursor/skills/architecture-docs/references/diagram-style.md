@@ -42,23 +42,29 @@ Based on [Anthropic's brand palette](https://github.com/anthropics/skills/blob/m
 warm neutrals plus three muted accents. Fills are 20% tints of the accent over
 Light. Contrast ratios are WCAG values.
 
-| Token | Hex | Use |
-|---|---|---|
-| Dark | `#141413` | All text (≥ 14:1 on every fill) |
-| Light | `#faf9f5` | Diagram background, boundary fill |
-| White | `#ffffff` | Module fill |
-| Oat | `#f0eee6` | Stage panels, sequence phases |
-| Light Gray | `#e8e6dc` | Stores |
-| Mid Gray | `#b0aea5` | Boundary outlines |
-| Line | `#8a887f` | Grey edges and module outlines (3.6:1 on white) |
-| Muted | `#5e5d59` | Stage and boundary titles, grey edge labels (6.3:1 on Light) |
-| Orange / tint | `#d97757` / `#f3dfd5` | Core, primary path |
-| Green / tint | `#788c5d` / `#e0e3d7` | People, and states waiting on a person |
-| Blue / tint | `#6a9bcc` / `#dde6ed` | External services |
+| Token | Light | Dark | Use |
+|---|---|---|---|
+| Text | `#141413` | `#faf9f5` | All text (≥ 11:1 on every fill in both modes) |
+| Background | `#faf9f5` | `#1f1e1d` | Diagram background, boundary fill |
+| Surface | `#ffffff` | `#2b2a27` | Module fill |
+| Panel | `#f0eee6` | `#262523` | Stage panels, sequence phases |
+| Store | `#e8e6dc` | `#3a3935` | Stores, phase outlines |
+| Boundary | `#b0aea5` | `#5e5d59` | Boundary outlines |
+| Line | `#8a887f` | same | Grey edges and module outlines (≥ 3.6:1 in both modes) |
+| Muted | `#5e5d59` | `#b0aea5` | Stage and boundary titles, grey edge labels (≥ 5.2:1) |
+| Orange / tint | `#d97757` / `#f3dfd5` | same / `#48322a` | Core, primary path |
+| Green / tint | `#788c5d` / `#e0e3d7` | same / `#33362b` | People, and states waiting on a person |
+| Blue / tint | `#6a9bcc` / `#dde6ed` | same / `#303a44` | External services |
 
-Every SVG has an opaque Light background (theme override `N7`). On GitHub's
-dark theme, the diagram reads as a card, and no text sits on an unknown
-background.
+Dark tints are 22% of the accent over the dark background. `_style.d2` holds
+the light values. D2's dark themes don't recolour explicit style colours, so
+`render.sh` appends `_dark.css` to each SVG. It remaps every light colour
+under `@media (prefers-color-scheme: dark)`, so one SVG follows the viewer's
+system setting on GitHub and in the docs site. A new colour in any `.d2` file
+needs a dark value in `_dark.css`; `render.sh` fails until it has one. A
+viewer who sets GitHub or the site to dark while the system is light still
+sees the light diagram, because an SVG image can only read the system
+setting.
 
 ## Vocabulary
 
@@ -70,12 +76,12 @@ first.
 |---|---|---|
 | Person | `person` | Green figure. As a state or participant, use it with `shape: rectangle`. |
 | Core: owns state or policy | `core` | Orange box, bold |
-| Module: adapter or plumbing we own | `module` | White box |
+| Module: adapter or plumbing we own | `module` | Plain box |
 | External service | `external` | Blue box |
 | Store: database, file, queue | `store` | Grey cylinder |
-| Stage: one step of a flow | `stage` | Oat panel, title at the bottom |
+| Stage: one step of a flow | `stage` | Shaded panel, title at the bottom |
 | Boundary: trust or deployment | `boundary` | Dashed outline |
-| Sequence phase | `phase` | Oat group |
+| Sequence phase | `phase` | Shaded group |
 | Layout-only container | `frame` | Invisible. Keeps a child at its natural size inside a grid cell. |
 | Empty grid cell | `spacer` | Invisible, one node in size |
 
@@ -116,6 +122,7 @@ Node labels are a title, then an optional subtitle line for the role:
 ```
 docs/diagrams/
   _style.d2      shared classes and theme (copy of assets/_style.d2)
+  _dark.css      dark palette appended to every SVG (copy of assets/_dark.css)
   render.sh      renders every .d2; --check fails if an SVG is stale
   context.d2     one source per diagram...
   context.svg    ...committed next to its render

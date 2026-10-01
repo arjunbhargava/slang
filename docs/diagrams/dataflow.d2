@@ -1,0 +1,47 @@
+...@_style
+grid-rows: 2
+grid-gap: 40
+
+who: {
+  class: frame
+  learner: Learner {class: person}
+}
+
+stages: {
+  class: frame
+  grid-columns: 3
+  grid-gap: 36
+  hear: 1 · Hear {
+    class: stage
+    grid-rows: 3
+    vertical-gap: 48
+    capture: Audio capture {class: module}
+    stt: "STT adapter\n↔ STT provider" {class: module}
+    review: "Transcript review\naccept · edit · discard" {class: module}
+  }
+  think: 2 · Think {
+    class: stage
+    grid-rows: 3
+    vertical-gap: 48
+    spacer: {class: spacer}
+    mapping: "Provider mapping\n↔ model provider" {class: module}
+    agent: "Conversation agent\nhistory · tutoring policy" {class: core}
+  }
+  speak: 3 · Speak {
+    class: stage
+    grid-rows: 3
+    vertical-gap: 48
+    playback: Playback {class: module}
+    spacer: {class: spacer}
+    tts: "TTS adapter\n↔ TTS provider" {class: module}
+  }
+}
+
+who.learner -> stages.hear.capture: speech {class: primary}
+stages.hear.capture -> stages.hear.stt: audio {class: primary}
+stages.hear.stt -> stages.hear.review: final transcript {class: primary}
+stages.hear.review -> stages.think.agent: committed transcript {class: primary}
+stages.think.agent -> stages.speak.tts: reply text {class: primary}
+stages.speak.tts -> stages.speak.playback: audio {class: primary}
+stages.speak.playback -> who.learner: voice {class: primary}
+stages.think.agent <-> stages.think.mapping: history → reply {class: flow}

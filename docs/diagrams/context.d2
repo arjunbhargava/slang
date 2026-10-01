@@ -1,0 +1,27 @@
+...@_style
+grid-columns: 3
+grid-gap: 64
+
+who: {
+  class: frame
+  learner: Learner {class: person}
+}
+
+machine: "Learner's machine · holds all API keys" {
+  class: boundary
+  harness: "Terminal harness\nslang" {class: core}
+}
+
+providers: External providers {
+  class: boundary
+  grid-rows: 3
+  vertical-gap: 28
+  stt: "STT provider\nSoniox or AssemblyAI" {class: external}
+  llm: "Model provider\nBedrock · OpenAI · Anthropic" {class: external}
+  tts: "TTS provider\nElevenLabs" {class: external}
+}
+
+who.learner <-> machine.harness: speaks · hears {class: primary}
+machine.harness <-> providers.stt: audio → transcript {class: flow}
+machine.harness <-> providers.llm: history → reply {class: flow}
+machine.harness <-> providers.tts: reply → speech {class: flow}

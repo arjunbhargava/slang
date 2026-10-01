@@ -1,0 +1,15 @@
+...@_style
+vars: {d2-config: {layout-engine: elk}}
+direction: right
+
+person: Person {class: person}
+boundary: "Trust boundary" {
+  class: boundary
+  core: "Core\nowns state or policy" {class: core; width: 190}
+  module: "Module\nadapter or plumbing" {class: module; width: 190}
+  core -> module: data flow {class: flow}
+}
+external: "External service\nreached over the network" {class: external; width: 210}
+
+person -> boundary.core: primary path {class: primary}
+boundary.module -> external: "optional, reply, failure" {class: aside}

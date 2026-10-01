@@ -1,0 +1,35 @@
+...@_style
+shape: sequence_diagram
+
+learner: Learner {class: person; shape: rectangle; width: 150; height: 56; style.border-radius: 8}
+harness: Harness {class: module; width: 150; height: 56}
+stt: STT provider {class: external; width: 150; height: 56}
+agent: Conversation agent {class: core; width: 170; height: 56}
+llm: Model provider {class: external; width: 150; height: 56}
+tts: TTS provider {class: external; width: 150; height: 56}
+
+record: 1 · Record {
+  class: phase
+  learner -> harness: Enter {class: primary}
+  harness -> stt: stream audio {class: flow}
+  learner -> harness: Enter {class: primary}
+  stt -> harness: final transcript {class: aside}
+}
+review: 2 · Review {
+  class: phase
+  harness -> learner: show transcript {class: flow}
+  learner -> harness: accept or edit {class: primary}
+}
+respond: 3 · Respond {
+  class: phase
+  harness -> agent: committed transcript {class: primary}
+  agent -> llm: history + policy {class: flow}
+  llm -> agent: reply {class: aside}
+  agent -> harness: reply text {class: aside}
+}
+speak: 4 · Speak, microphone off {
+  class: phase
+  harness -> tts: reply text {class: flow}
+  tts -> harness: audio {class: aside}
+  harness -> learner: play audio, stoppable {class: primary}
+}

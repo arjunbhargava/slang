@@ -15,7 +15,7 @@ visual decision.
 
 1. **One question per diagram.** Write the question above the diagram and the
    takeaway below it. If the takeaway needs "and", split the diagram.
-2. **Structure is authored; routing is computed.** Place nodes with grids so
+2. **Place nodes by hand; let the engine route edges.** Place nodes with grids so
    the layout says what the diagram means (stages left to right, steps top to
    bottom), and let TALA route the edges. A layout that the engine invents
    changes unpredictably when a node is added. Readers lose their spatial
@@ -24,7 +24,7 @@ visual decision.
    always shown twice, by colour and by shape, so a colour-blind reader or a
    greyscale print loses nothing.
 4. **One accent.** Only core elements and the primary path get orange, so it
-   draws the eye to the main story. If everything is highlighted, nothing is.
+   draws the eye to the main story. More accented elements dilute it.
 5. **Say what moves.** Edge labels are nouns for what flows (`committed
    transcript`), never verbs like `calls` or `uses`.
 6. **Consistent identity.** An element has the same name, kind, and colour in
